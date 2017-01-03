@@ -1,6 +1,9 @@
 # vueAdmin
 a simple admin template based on [vuejs2](http://vuejs.org/) and [element](http://element.eleme.io/#/).
 
+### demo 
+https://taylorchen709.github.io/vueAdmin/dist/index.html#/login
+
 ### Usage
 
 This is a project template for [vue-cli](https://github.com/vuejs/vue-cli).
