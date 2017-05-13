@@ -43,9 +43,11 @@
 							</ul>
 						</template>
 						<template v-else>
+					  <ul>
 							<li class="el-submenu">
 								<div class="el-submenu__title el-menu-item" style="padding-left: 20px;height: 56px;line-height: 56px;padding: 0 20px;" :class="$route.path==item.children[0].path?'is-active':''" @click="$router.push(item.children[0].path)"><i :class="item.iconCls"></i></div>
 							</li>
+						</ul>
 						</template>
 					</li>
 				</ul>
@@ -53,8 +55,7 @@
 			<section class="content-container">
 				<div class="grid-content bg-purple-light">
 					<el-col :span="24" class="breadcrumb-container">
-						<strong class="title">{{$route.name}}</strong>
-						<el-breadcrumb separator="/" class="breadcrumb-inner">
+						<el-breadcrumb separator="/">
 							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
 								{{ item.name }}
 							</el-breadcrumb-item>
@@ -255,9 +256,6 @@
 						width: 200px;
 						float: left;
 						color: #475669;
-					}
-					.breadcrumb-inner {
-						float: right;
 					}
 				}
 				.content-wrapper {
