@@ -1,7 +1,7 @@
 <template>
 	<section>
 		<!--工具条-->
-		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
+		<el-col :span="24" >
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
 					<el-input v-model="filters.name" placeholder="姓名"></el-input>
@@ -11,6 +11,9 @@
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" @click="handleAdd">新增</el-button>
+				</el-form-item>
+				<el-form-item>
+				  <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -40,9 +43,12 @@
 		</el-table>
 
 		<!--工具条-->
-		<el-col :span="24" class="toolbar">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+		<el-col :span="24" style="padding: 5px 0px">
+			<el-pagination layout="total, sizes, prev, pager, next"
+										 @current-change="handleCurrentChange"
+										 :page-size="20"
+										 :total="total"
+										 style="float:right;">
 			</el-pagination>
 		</el-col>
 

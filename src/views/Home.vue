@@ -2,7 +2,7 @@
 	<el-row class="container">
 		<el-col :span="24" class="header">
 			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'':sysName}}
+				{{collapsed?'V':sysName}}
 			</el-col>
 			<el-col :span="10">
 				<div class="tools" @click.prevent="collapse">
@@ -148,8 +148,8 @@
 		bottom: 0px;
 		width: 100%;
 		.header {
-			height: 60px;
-			line-height: 60px;
+			height: 50px;
+			line-height: 50px;
 			background: $color-primary;
 			color:#fff;
 			.userinfo {
@@ -163,14 +163,14 @@
 						width: 40px;
 						height: 40px;
 						border-radius: 20px;
-						margin: 10px 0px 10px 10px;
+						margin: 5px 0px 5px 10px;
 						float: right;
 					}
 				}
 			}
 			.logo {
 				//width:230px;
-				height:60px;
+				height:50px;
 				font-size: 22px;
 				padding-left:20px;
 				padding-right:20px;
@@ -195,8 +195,6 @@
 			.tools{
 				padding: 0px 23px;
 				width:14px;
-				height: 60px;
-				line-height: 60px;
 				cursor: pointer;
 			}
 		}
@@ -204,7 +202,7 @@
 			display: flex;
 			// background: #324057;
 			position: absolute;
-			top: 60px;
+			top: 50px;
 			bottom: 0px;
 			overflow: hidden;
 			aside {
@@ -241,7 +239,7 @@
 				width: 230px;
 			}
 			.content-container {
-				// background: #f1f2f7;
+				background: #f5f5f5;
 				flex:1;
 				// position: absolute;
 				// right: 0px;
@@ -249,9 +247,11 @@
 				// bottom: 0px;
 				// left: 230px;
 				overflow-y: scroll;
-				padding: 20px;
+				// padding: 20px;
 				.breadcrumb-container {
-					//margin-bottom: 15px;
+					box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
+					padding: 20px 10px;
+					background-color: #fff;
 					.title {
 						width: 200px;
 						float: left;
@@ -259,10 +259,13 @@
 					}
 				}
 				.content-wrapper {
+					margin-top: 3px;
+					padding: 10px;
 					background-color: #fff;
 					box-sizing: border-box;
 				}
 			}
 		}
 	}
+
 </style>
