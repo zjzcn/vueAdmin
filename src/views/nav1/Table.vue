@@ -43,12 +43,12 @@
 		</el-table>
 
 		<!--工具条-->
-		<el-col :span="24" style="padding: 5px 0px">
+		<el-col :span="24" style="padding: 10px 0px">
 			<el-pagination layout="total, sizes, prev, pager, next"
 										 @current-change="handleCurrentChange"
 										 :page-size="20"
 										 :total="total"
-										 style="float:right;">
+										 style="float:right; margin-right:-5px">
 			</el-pagination>
 		</el-col>
 
