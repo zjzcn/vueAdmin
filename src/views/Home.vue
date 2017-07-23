@@ -211,7 +211,7 @@
 			}
 
 			.content-container {
-				background: #f5f5f5;
+				background: #fff;
 				flex:1;
 				overflow-y: auto;
 				overflow-x: hidden;
@@ -228,7 +228,6 @@
 				.breadcrumb-container {
 					box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
 					padding: 15px;
-					background-color: #fff;
 					.title {
 						width: 200px;
 						float: left;
@@ -238,7 +237,6 @@
 				.content-wrapper {
 					margin-top: 1px;
 					padding: 15px;
-					background-color: #fff;
 					box-sizing: border-box;
 				}
 			}
