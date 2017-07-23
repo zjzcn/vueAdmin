@@ -125,7 +125,7 @@
 </script>
 
 <style scoped lang="scss">
-	@import '~scss_vars';
+	@import '../styles/vars.scss';
 	
 	.container {
 		position: absolute;
@@ -190,9 +190,15 @@
 			bottom: 0px;
 			overflow: hidden;
 			.sidebar {
-				// position: absolute;
-				// top: 0px;
-				// bottom: 0px;
+				overflow-y: auto;
+				overflow-x: hidden;
+				&::-webkit-scrollbar {
+					width: 6px;
+					background-color: #cfd5de;
+				}
+				&::-webkit-scrollbar-thumb {
+					background: #8b939e;
+				}
 				.el-menu{
 					height: 100%;
 				}
@@ -203,16 +209,22 @@
 			.sidebar-collapse-width {
 				width: 64px;
 			}
+
 			.content-container {
 				background: #f5f5f5;
 				flex:1;
-				// position: absolute;
-				// right: 0px;
-				// top: 0px;
-				// bottom: 0px;
-				// left: 230px;
-				overflow-y: scroll;
-				// padding: 20px;
+				overflow-y: auto;
+				overflow-x: hidden;
+				&::-webkit-scrollbar {
+					width: 6px;
+					background-color: #cfd5de;
+				}
+				&::-webkit-scrollbar-thumb {
+					background: #8b939e;
+				}
+				.el-menu{
+					height: 100%;
+				}
 				.breadcrumb-container {
 					box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
 					padding: 15px;
