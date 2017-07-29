@@ -2,7 +2,7 @@
 	<el-row class="container">
 		<el-col :span="24" class="header">
 			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
-				{{collapsed?'V':sysName}}
+				{{collapsed?sysShortName:sysName}}
 			</el-col>
 			<el-col :span="10">
 				<div class="tools" @click.prevent="collapse">
@@ -65,6 +65,7 @@
 		data() {
 			return {
 				sysName:'VUEADMIN',
+				sysShortName:'V',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',

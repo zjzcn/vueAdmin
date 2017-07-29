@@ -27,6 +27,11 @@
 				</el-table-column>
 				<el-table-column prop="addr" label="地址" min-width="180" sortable>
 				</el-table-column>
+				<el-table-column label="操作" width="150">
+					<template scope="scope">
+					<el-button type="text">详情</el-button>
+					</template>
+				</el-table-column>
 			</el-table>
 		</template>
 
