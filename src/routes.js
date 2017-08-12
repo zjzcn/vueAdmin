@@ -9,6 +9,8 @@ import Page4 from './views/nav2/Page4.vue'
 import Page5 from './views/nav2/Page5.vue'
 import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
+import lnglat_cut from './views/map/lnglat_cut.vue'
+import google_s2 from  './views/map/google_s2.vue'
 
 let routes = [
     {
@@ -62,7 +64,9 @@ let routes = [
         name: 'Charts',
         iconCls: 'fa fa-bar-chart',
         children: [
-            { path: '/echarts', component: echarts, name: 'echarts' }
+          { path: '/echarts', component: echarts, name: 'echarts' },
+          { path: '/lnglat_cut', component: lnglat_cut, name: 'lnglat_cut' },
+          { path: '/google_s2', component: google_s2, name: 'google_s2' }
         ]
     },
     {

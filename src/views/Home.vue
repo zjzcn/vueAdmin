@@ -64,8 +64,8 @@
 	export default {
 		data() {
 			return {
-				sysName:'VUEADMIN',
-				sysShortName:'V',
+				sysName:'DUST',
+				sysShortName:'D',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
