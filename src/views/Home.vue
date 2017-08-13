@@ -2,6 +2,7 @@
 	<el-row class="container">
 		<el-col :span="24" class="header">
 			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
+				<i class="fa fa-connectdevelop"></i>
 				{{collapsed?sysShortName:sysName}}
 			</el-col>
 			<el-col :span="10">
@@ -10,8 +11,8 @@
 				</div>
 			</el-col>
 			<el-col :span="4" class="userinfo">
-				<el-dropdown trigger="hover">
-					<span class="el-dropdown-link userinfo-inner"><img :src="this.sysUserAvatar" /> {{sysUserName}}</span>
+				<el-dropdown trigger="click">
+					<span class="el-dropdown-link userinfo-inner">{{sysUserName}}<i class="el-icon-caret-bottom el-icon--right"></i></span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的消息</el-dropdown-item>
 						<el-dropdown-item>设置</el-dropdown-item>
@@ -64,8 +65,8 @@
 	export default {
 		data() {
 			return {
-				sysName:'DUST',
-				sysShortName:'D',
+				sysName:'MapStudio',
+				sysShortName:'',
 				collapsed:false,
 				sysUserName: '',
 				sysUserAvatar: '',
@@ -138,34 +139,18 @@
 			line-height: 50px;
 			background: $color-primary;
 			color:#fff;
-			.userinfo {
-				text-align: right;
-				padding-right: 35px;
-				float: right;
-				.userinfo-inner {
-					cursor: pointer;
-					color:#fff;
-					img {
-						width: 40px;
-						height: 40px;
-						border-radius: 20px;
-						margin: 5px 0px 5px 10px;
-						float: right;
-					}
-				}
-			}
 			.logo {
 				height:50px;
 				font-size: 22px;
-				padding-left:20px;
+				padding-left:10px;
 				padding-right:20px;
 				border-color: rgba(238,241,146,0.3);
 				border-right-width: 1px;
 				border-right-style: solid;
-				img {
-					width: 40px;
+				i {
+					font-size: 32px;
+					margin: 9px 10px 9px 0px;
 					float: left;
-					margin: 10px 10px 10px 18px;
 				}
 				.txt {
 					color:#fff;
@@ -181,6 +166,16 @@
 				padding: 0px 23px;
 				width:14px;
 				cursor: pointer;
+			}
+
+			.userinfo {
+				text-align: right;
+				padding-right: 35px;
+				float: right;
+				.userinfo-inner {
+					cursor: pointer;
+					color:#fff;
+				}
 			}
 		}
 		.main {
