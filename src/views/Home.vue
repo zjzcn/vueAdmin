@@ -128,7 +128,7 @@
 
 <style scoped lang="scss">
 	@import '../styles/vars.scss';
-	
+
 	.container {
 		position: absolute;
 		top: 0px;
@@ -188,6 +188,7 @@
 			.sidebar {
 				overflow-y: auto;
 				overflow-x: hidden;
+				z-index: 200;
 				&::-webkit-scrollbar {
 					width: 6px;
 					background-color: #cfd5de;

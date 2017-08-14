@@ -22,7 +22,7 @@
 
 <style>
   .map-container {
-    height: 80vh;
+    height: 81vh;
     width: 100%;
     position: relative;
   }
