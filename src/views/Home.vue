@@ -199,10 +199,13 @@
 					height: 100%;
 				}
 			}
+
 			.sidebar-width {
 				width: 210px;
 			}
 			.sidebar-collapse-width {
+				overflow-y: visible;
+				overflow-x: visible;
 				width: 64px;
 			}
 
