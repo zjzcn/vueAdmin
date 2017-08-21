@@ -22,6 +22,7 @@
 
 <script>
     import echarts from 'echarts'
+    import {theme} from '../../assets/echarts-theme'
 
     export default {
         data() {
@@ -35,7 +36,7 @@
 
         methods: {
             drawColumnChart() {
-                this.chartColumn = echarts.init(document.getElementById('chartColumn'));
+                this.chartColumn = echarts.init(document.getElementById('chartColumn'), theme);
                 this.chartColumn.setOption({
                   title: { text: 'Column Chart' },
                   tooltip: {},
@@ -51,7 +52,7 @@
                 });
             },
             drawBarChart() {
-                this.chartBar = echarts.init(document.getElementById('chartBar'));
+                this.chartBar = echarts.init(document.getElementById('chartBar'), theme);
                 this.chartBar.setOption({
                     title: {
                         text: 'Bar Chart',
@@ -95,7 +96,7 @@
                 });
             },
             drawLineChart() {
-                this.chartLine = echarts.init(document.getElementById('chartLine'));
+                this.chartLine = echarts.init(document.getElementById('chartLine'), theme);
                 this.chartLine.setOption({
                     title: {
                         text: 'Line Chart'
@@ -143,7 +144,7 @@
                 });
             },
             drawPieChart() {
-                this.chartPie = echarts.init(document.getElementById('chartPie'));
+                this.chartPie = echarts.init(document.getElementById('chartPie'), theme);
                 this.chartPie.setOption({
                     title: {
                         text: 'Pie Chart',
