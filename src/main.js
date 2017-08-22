@@ -23,7 +23,7 @@ Vue.use(Vuex)
 Vue.use(VueAMap);
 VueAMap.initAMapApiLoader({
   key: '28966b6be8e4fa0e4c4f4c9b4bf8d3ce',
-  plugin: ['Autocomplete', 'PlaceSearch', 'Scale', 'OverView', 'ToolBar', 'MapType', 'PolyEditor', 'AMap.CircleEditor']
+  plugin: ['Autocomplete', 'PlaceSearch', 'Scale', 'OverView', 'ToolBar', 'MapType', 'PolyEditor', 'CircleEditor', 'DistrictSearch']
 });
 
 // NProgress.configure({ showSpinner: false });
