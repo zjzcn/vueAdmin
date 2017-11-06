@@ -23,23 +23,18 @@
 		</el-col>
 		<el-col :span="24" class="main">
 			<aside class="sidebar" :class="collapsed?'sidebar-collapse-width':'sidebar-width'">
-				<!--导航菜单-->
-				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
-					 unique-opened router :collapse="collapsed">
-					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
-						<el-submenu :index="index+''" v-if="!item.leaf">
-							<template slot="title">
-								<i :class="item.iconCls"></i>
-								<span slot="title">{{item.name}}</span>
-							</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-						</el-submenu>
-						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path">
-							<i :class="item.iconCls"></i>
-							<span slot="title">{{item.children[0].name}}</span>
-						</el-menu-item>
-					</template>
-				</el-menu>
+				<el-input
+					placeholder="输入关键字进行过滤"
+					v-model="filterText">
+				</el-input>
+				<el-tree
+					class="filter-tree"
+					:data="data2"
+					:props="defaultProps"
+					default-expand-all
+					:filter-node-method="filterNode"
+					ref="tree2">
+				</el-tree>
 			</aside>
 			<section class="content-container">
 				<div class="grid-content bg-purple-light">
@@ -62,7 +57,13 @@
 </template>
 
 <script>
+	import Api from '../api/api'
 	export default {
+    watch: {
+      filterText(val) {
+        this.$refs.tree2.filter(val);
+      }
+    },
 		data() {
 			return {
 				sysName:'MapStudio',
@@ -79,21 +80,31 @@
 					type: [],
 					resource: '',
 					desc: ''
-				}
+				},
+        filterText: '',
+        data2: [],
+        defaultProps: {
+          children: 'children',
+          label: 'label'
+        }
 			}
 		},
+    created() {
+//			Api.clusterState().then(
+//        resp => {
+//          console.log(resp);
+//          this.data2 = resp.metadata.indices.map((key, value) => {
+//            return [{id: key, label: key}]
+//					});
+//          console.log(this.data2);
+//        }
+//      );
+		},
 		methods: {
-			onSubmit() {
-				console.log('submit!');
-			},
-			handleopen() {
-				//console.log('handleopen');
-			},
-			handleclose() {
-				//console.log('handleclose');
-			},
-			handleselect: function (a, b) {
-			},
+      filterNode(value, data) {
+        if (!value) return true;
+        return data.label.indexOf(value) !== -1;
+      },
 			//退出登录
 			logout: function () {
 				var _this = this;
@@ -114,12 +125,6 @@
 			}
 		},
 		mounted() {
-			var user = sessionStorage.getItem('user');
-			if (user) {
-				user = JSON.parse(user);
-				this.sysUserName = user.name || '';
-				this.sysUserAvatar = user.avatar || '';
-			}
 
 		}
 	}
@@ -196,8 +201,13 @@
 				&::-webkit-scrollbar-thumb {
 					background: #8b939e;
 				}
-				.el-menu{
-					height: 100%;
+				.el-input {
+					input.el-input__inner {
+					  border-radius: 0px;
+				  }
+				}
+				.filter-tree{
+					height: calc(100% - 38px);
 				}
 			}
 
