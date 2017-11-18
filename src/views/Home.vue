@@ -1,18 +1,18 @@
 <template>
-	<el-row class="container">
-		<el-col :span="24" class="header">
+	<el-container class="container">
+		<header class="header">
 			<el-col :span="10" class="logo" :class="collapsed?'logo-collapse-width':'logo-width'">
 				<i class="fa fa-connectdevelop"></i>
 				{{collapsed?sysShortName:sysName}}
 			</el-col>
 			<el-col :span="10">
-				<div class="tools" @click.prevent="collapse">
+				<div class="tool" @click.prevent="collapse">
 					<i class="fa fa-align-justify"></i>
 				</div>
 			</el-col>
-			<el-col :span="4" class="userinfo">
+			<el-col :span="4" class="user">
 				<el-dropdown trigger="click">
-					<span class="el-dropdown-link userinfo-inner">{{sysUserName}}<i class="el-icon-caret-bottom el-icon--right"></i></span>
+					<span class="el-dropdown-link">{{sysUserName}}<i class="el-icon-caret-bottom"></i></span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>我的消息</el-dropdown-item>
 						<el-dropdown-item>设置</el-dropdown-item>
@@ -20,8 +20,8 @@
 					</el-dropdown-menu>
 				</el-dropdown>
 			</el-col>
-		</el-col>
-		<el-col :span="24" class="main">
+		</header>
+		<div :span="24" class="content-container">
 			<aside class="sidebar" :class="collapsed?'sidebar-collapse-width':'sidebar-width'">
 				<!--导航菜单-->
 				<el-menu :default-active="$route.path" class="el-menu-vertical-demo" @open="handleopen" @close="handleclose" @select="handleselect"
@@ -41,31 +41,29 @@
 					</template>
 				</el-menu>
 			</aside>
-			<section class="content-container">
-				<div class="grid-content bg-purple-light">
-					<el-col :span="24" class="breadcrumb-container">
-						<el-breadcrumb separator="/">
-							<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
-								{{ item.name }}
-							</el-breadcrumb-item>
-						</el-breadcrumb>
-					</el-col>
-					<el-col :span="24" class="content-wrapper">
-						<transition name="fade" mode="out-in">
-							<router-view></router-view>
-						</transition>
-					</el-col>
-				</div>
-			</section>
-		</el-col>
-	</el-row>
+			<div :span="24" class="main-container">
+				<el-breadcrumb separator="/">
+					<el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+						{{ item.name }}
+					</el-breadcrumb-item>
+				</el-breadcrumb>
+				<el-main>
+					<transition name="fade" mode="out-in">
+						<router-view></router-view>
+					</transition>
+				</el-main>
+			</div>
+		</div>
+	</el-container>
 </template>
 
 <script>
-	export default {
-		data() {
+
+
+  export default {
+    data() {
 			return {
-				sysName:'前端学习平台',
+				sysName:'MapStudio',
 				sysShortName:'',
 				collapsed:false,
 				sysUserName: '',
@@ -127,7 +125,9 @@
 </script>
 
 <style scoped lang="scss">
-	@import '../styles/user-variables';
+	$header-height: 50px;
+	$sidebar-width: 220px;
+	$sidebar-collapse-width: 64px;
 
 	.container {
 		position: absolute;
@@ -135,54 +135,50 @@
 		bottom: 0px;
 		width: 100%;
 		.header {
-			height: 50px;
-			line-height: 50px;
-			background: $color-primary;
-			color:#fff;
+			background-color: #303543;
+			color: #fff;
+			line-height: $header-height;
+			height: $header-height;
+			width: 100%;
 			.logo {
-				height:50px;
+				height: $header-height;
 				font-size: 20px;
-				padding-left:12px;
-				padding-right:20px;
-				border-color: rgba(238,241,146,0.3);
-				border-right-width: 1px;
-				border-right-style: solid;
+				padding-left: 12px;
+				padding-right: 20px;
+				border-right: 1px solid rgba(238,241,146,0.3);
 				i {
 					font-size: 28px;
 					margin: 10px 10px 10px 0px;
 					float: left;
 				}
-				.txt {
-					color:#fff;
-				}
 			}
-			.logo-width{
-				width:210px;
+			.logo-width {
+				width: $sidebar-width;
 			}
 			.logo-collapse-width{
-				width:64px
+				width: $sidebar-collapse-width;
 			}
-			.tools{
+			.tool {
 				padding: 0px 23px;
 				width:14px;
 				cursor: pointer;
 			}
 
-			.userinfo {
+			.user {
 				text-align: right;
 				padding-right: 35px;
 				float: right;
-				.userinfo-inner {
+				.el-dropdown-link {
 					cursor: pointer;
 					color:#fff;
 				}
 			}
 		}
-		.main {
+		.content-container {
+			width: 100%;
 			display: flex;
-			// background: #324057;
 			position: absolute;
-			top: 50px;
+			top: $header-height;
 			bottom: 0px;
 			overflow: hidden;
 			.sidebar {
@@ -200,17 +196,16 @@
 					height: 100%;
 				}
 			}
-
 			.sidebar-width {
-				width: 210px;
+				width: $sidebar-width;
 			}
 			.sidebar-collapse-width {
 				overflow-y: visible;
 				overflow-x: visible;
-				width: 64px;
+				width: $sidebar-collapse-width;
 			}
 
-			.content-container {
+			.main-container {
 				background: #fff;
 				flex:1;
 				overflow-y: auto;
@@ -222,10 +217,7 @@
 				&::-webkit-scrollbar-thumb {
 					background: #8b939e;
 				}
-				.el-menu{
-					height: 100%;
-				}
-				.breadcrumb-container {
+				.el-breadcrumb {
 					box-shadow: 0 1px 2px 0 rgba(0,0,0,.1);
 					padding: 15px;
 					.title {
@@ -234,7 +226,7 @@
 						color: #475669;
 					}
 				}
-				.content-wrapper {
+				.el-main {
 					margin-top: 1px;
 					padding: 15px;
 					box-sizing: border-box;
