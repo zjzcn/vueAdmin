@@ -40,6 +40,7 @@
         polygons: [],
         events: {
           'moveend': (e) => {
+            console.log(e);
             this.initDust();
           }
         },
@@ -51,6 +52,7 @@
     },
     methods: {
       initDust() {
+        console.log(this.mapManager);
         this.mapManager.getMap().clearMap();
         if (this.mapManager.getMap().getZoom() < 18) {
           return;

@@ -65,7 +65,7 @@
 	export default {
 		data() {
 			return {
-				sysName:'前端学习平台',
+				sysName:'MapStudio',
 				sysShortName:'',
 				collapsed:false,
 				sysUserName: '',
@@ -141,15 +141,15 @@
 			color:#fff;
 			.logo {
 				height:50px;
-				font-size: 20px;
-				padding-left:12px;
+				font-size: 22px;
+				padding-left:10px;
 				padding-right:20px;
 				border-color: rgba(238,241,146,0.3);
 				border-right-width: 1px;
 				border-right-style: solid;
 				i {
-					font-size: 28px;
-					margin: 10px 10px 10px 0px;
+					font-size: 32px;
+					margin: 9px 10px 9px 0px;
 					float: left;
 				}
 				.txt {

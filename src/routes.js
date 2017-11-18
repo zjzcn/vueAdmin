@@ -31,7 +31,7 @@ let routes = [
         path: '/',
         component: Home,
         name: '导航一',
-        iconCls: 'el-icon-message',//图标样式class
+        iconCls: 'fa fa-id-card-o',//图标样式class
         children: [
             { path: '/main', component: Main, name: '主页', hidden: true },
             { path: '/table', component: Table, name: 'Table' },
