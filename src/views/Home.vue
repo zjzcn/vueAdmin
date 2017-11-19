@@ -206,7 +206,7 @@
 			}
 
 			.main-container {
-				background: #fff;
+				background: #fafafa;
 				flex:1;
 				overflow-y: auto;
 				overflow-x: hidden;
