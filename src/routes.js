@@ -2,80 +2,90 @@ import Login from './views/Login.vue'
 import NotFound from './views/404.vue'
 import Home from './views/Home.vue'
 import Main from './views/Main.vue'
+
+import TrainData from './views/data/train-data.vue'
+import StopWord from './views/data/stop-word.vue'
+import DictData from './views/data/dict-data.vue'
+
+import TrainTask from './views/task/train-task.vue'
+
 import Table from './views/nav1/Table.vue'
 import Form from './views/nav1/Form.vue'
 import user from './views/nav1/user.vue'
-import Page4 from './views/nav2/Page4.vue'
-import Page5 from './views/nav2/Page5.vue'
+
 import Page6 from './views/nav3/Page6.vue'
 import echarts from './views/charts/echarts.vue'
 import lnglat_cut from './views/map/lnglat_cut.vue'
-import google_s2 from  './views/map/google_s2.vue'
-import plugin_demo from './views/map/plugin_demo.vue'
+
 
 let routes = [
-    {
-        path: '/login',
-        component: Login,
-        name: '',
-        hidden: true
-    },
-    {
-        path: '/404',
-        component: NotFound,
-        name: '',
-        hidden: true
-    },
-    //{ path: '/main', component: Main },
-    {
-        path: '/',
-        component: Home,
-        name: '导航一',
-        iconCls: 'fa fa-id-card-o',//图标样式class
-        children: [
-            { path: '/main', component: Main, name: '主页', hidden: true },
-            { path: '/table', component: Table, name: 'Table' },
-            { path: '/form', component: Form, name: 'Form' },
-            { path: '/user', component: user, name: '列表' },
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '导航二',
-        iconCls: 'fa fa-id-card-o',
-        children: [
-            { path: '/page4', component: Page4, name: '页面4' },
-            { path: '/page5', component: Page5, name: '页面5' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: '',
-        iconCls: 'fa fa-address-card',
-        leaf: true,//只有一个节点
-        children: [
-            { path: '/page6', component: Page6, name: '导航三' }
-        ]
-    },
-    {
-        path: '/',
-        component: Home,
-        name: 'Charts',
-        iconCls: 'fa fa-bar-chart',
-        children: [
-          { path: '/echarts', component: echarts, name: 'echarts' },
-          { path: '/lnglat_cut', component: lnglat_cut, name: 'lnglat_cut' },
-          { path: '/google_s2', component: google_s2, name: 'google_s2' },
-          { path: '/plugin_demo', component: plugin_demo, name: 'plugin_demo' }
-        ]
-    },
-    {
-        path: '*',
-        hidden: true,
-        redirect: { path: '/404' }
-    }
+  {
+    path: '/login',
+    component: Login,
+    name: '',
+    hidden: true
+  },
+  {
+    path: '/404',
+    component: NotFound,
+    name: '',
+    hidden: true
+  },
+  //{ path: '/main', component: Main },
+  {
+    path: '/',
+    component: Home,
+    name: '数据管理',
+    icon: 'fa fa-database',//图标样式class
+    children: [
+      { path: '/main', component: Main, name: '主页', hidden: true },
+      { path: '/train-data', component: TrainData, name: '训练数据管理', icon: 'fa fa-file' },
+      { path: '/dict-data', component: DictData, name: '词典管理', icon: 'fa fa-file' },
+      { path: '/stop-word', component: StopWord, name: '停用词管理', icon: 'fa fa-file' },
+      { path: '/table', component: Table, name: '预料库管理', icon: 'fa fa-file' }
+    ]
+  },
+  {
+    path: '/',
+    component: Home,
+    name: '任务管理',
+    icon: 'fa fa-hourglass-2',
+    children: [
+      { path: '/train-task', component: TrainTask, name: '任务管理', icon: 'fa fa-file' },
+      { path: '/train-task', component: TrainTask, name: '历史任务', icon: 'fa fa-file' },
+      { path: '/user', component: user, name: '告警配置', icon: 'fa fa-file' },
+    ]
+  },
+  {
+    path: '/',
+    component: Home,
+    name: '模型管理',
+    icon: 'fa fa-cube',
+    children: [
+      { path: '/page6', component: Page6, name: '模型管理', icon: 'fa fa-file' },
+      { path: '/page6', component: Page6, name: '模型版本管理', icon: 'fa fa-file' },
+      { path: '/page6', component: Page6, name: '模型评估', icon: 'fa fa-file' },
+      { path: '/page6', component: Page6, name: '模型使用', icon: 'fa fa-file' }
+    ]
+  },
+  {
+    path: '/',
+    component: Home,
+    name: '系统管理',
+    icon: 'fa fa-gear',
+    children: [
+      { path: '/echarts', component: echarts, name: '配置管理', icon: 'fa fa-file' },
+      { path: '/lnglat_cut', component: lnglat_cut, name: '用户管理', icon: 'fa fa-file' },
+      { path: '/lnglat_cut', component: lnglat_cut, name: '用户组管理', icon: 'fa fa-file' },
+      { path: '/lnglat_cut', component: lnglat_cut, name: '角色管理', icon: 'fa fa-file' },
+      { path: '/lnglat_cut', component: lnglat_cut, name: '权限管理', icon: 'fa fa-file' }
+    ]
+  },
+  {
+    path: '*',
+    hidden: true,
+    redirect: { path: '/404' }
+  }
 ];
 
 export default routes;

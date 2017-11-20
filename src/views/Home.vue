@@ -29,13 +29,18 @@
 					<template v-for="(item,index) in $router.options.routes" v-if="!item.hidden">
 						<el-submenu :index="index+''" v-if="!item.leaf">
 							<template slot="title">
-								<i :class="item.iconCls"></i>
+								<i :class="item.icon"></i>
 								<span slot="title">{{item.name}}</span>
 							</template>
-							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
+							<el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">
+								<template slot="title">
+									<i :class="child.icon"></i>
+									<span slot="title">{{child.name}}</span>
+								</template>
+							</el-menu-item>
 						</el-submenu>
 						<el-menu-item v-if="item.leaf&&item.children.length>0" :index="item.children[0].path">
-							<i :class="item.iconCls"></i>
+							<i :class="item.icon"></i>
 							<span slot="title">{{item.children[0].name}}</span>
 						</el-menu-item>
 					</template>
@@ -63,7 +68,7 @@
   export default {
     data() {
 			return {
-				sysName:'MapStudio',
+				sysName:'语义分析平台',
 				sysShortName:'',
 				collapsed:false,
 				sysUserName: '',
