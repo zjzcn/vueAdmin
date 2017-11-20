@@ -17,7 +17,7 @@
 
 		<!--列表-->
 		<el-table :data="dataList" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-			<el-table-column type="index" width="60">
+			<el-table-column prop="id" label="ID" width="60">
 			</el-table-column>
 			<el-table-column prop="storeType" label="存储类型" width="80">
 			</el-table-column>
@@ -27,17 +27,18 @@
 			</el-table-column>
 			<el-table-column prop="fileSize" label="文件大小" width="80">
 			</el-table-column>
-			<el-table-column prop="filePath" label="文件描述" min-width="180">
+			<el-table-column prop="filePath" label="文件描述" min-width="100" show-overflow-tooltip="true">
 			</el-table-column>
-			<el-table-column prop="uploadTime" label="上传时间" min-width="180">
+			<el-table-column prop="uploadTime" label="上传时间" min-width="120">
 			</el-table-column>
 			<el-table-column prop="fileStatus" label="状态" min-width="80">
 				<template slot-scope="scope">
 					<el-tag type="success" size="small">成功</el-tag>
 				</template>
 			</el-table-column>
-			<el-table-column label="操作" width="150">
+			<el-table-column label="操作" width="220">
 				<template slot-scope="scope">
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">上传</el-button>
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
@@ -123,6 +124,7 @@
 					name: ''
 				},
 				dataList: [{
+				  id: 1,
 				  storeType: "Fuss",
 					fileName: "我的文件",
 					filePath: "http://dddd/oydf/dfd.txt",
@@ -130,6 +132,7 @@
 					uploadTime: "2017-10-10 10:22:23",
 					fileStatus: "成功"
 				}, {
+				  id: 2,
           storeType: "Fuss",
           fileName: "我的文件",
           filePath: "http://dddd/oydf/dfd.txt",
