@@ -8,6 +8,7 @@ import StopWord from './views/data/stop-word.vue'
 import DictData from './views/data/dict-data.vue'
 
 import TrainTask from './views/task/train-task.vue'
+import HistoryTask from './views/task/history-task.vue'
 
 import Table from './views/nav1/Table.vue'
 import Form from './views/nav1/Form.vue'
@@ -52,7 +53,7 @@ let routes = [
     icon: 'fa fa-hourglass-2',
     children: [
       { path: '/train-task', component: TrainTask, name: '任务管理', icon: 'fa fa-file' },
-      { path: '/train-task', component: TrainTask, name: '历史任务', icon: 'fa fa-file' },
+      { path: '/history-task', component: HistoryTask, name: '历史任务', icon: 'fa fa-file' },
       { path: '/user', component: user, name: '告警配置', icon: 'fa fa-file' },
     ]
   },

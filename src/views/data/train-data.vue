@@ -19,6 +19,8 @@
 		<el-table :data="dataList" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
 			<el-table-column prop="id" label="ID" width="60">
 			</el-table-column>
+			<el-table-column prop="名称" label="存储类型" width="80">
+			</el-table-column>
 			<el-table-column prop="storeType" label="存储类型" width="80">
 			</el-table-column>
 			<el-table-column prop="fileName" label="文件名" width="100">
@@ -27,7 +29,7 @@
 			</el-table-column>
 			<el-table-column prop="fileSize" label="文件大小" width="80">
 			</el-table-column>
-			<el-table-column prop="filePath" label="文件描述" min-width="100" show-overflow-tooltip="true">
+			<el-table-column prop="filePath" label="文件描述" min-width="100" :show-overflow-tooltip="true">
 			</el-table-column>
 			<el-table-column prop="uploadTime" label="上传时间" min-width="120">
 			</el-table-column>
@@ -38,7 +40,7 @@
 			</el-table-column>
 			<el-table-column label="操作" width="220">
 				<template slot-scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">上传</el-button>
+					<el-button size="small" @click="handleUpload(scope.$index, scope.row)">上传</el-button>
 					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
 					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
 				</template>
@@ -55,8 +57,36 @@
 			</el-pagination>
 		</el-col>
 
+		<!--新增界面-->
+		<el-dialog title="新增" :visible.sync="addFormVisible" :close-on-click-modal="false">
+			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+				<el-form-item label="存储类型" prop="name">
+					<el-input v-model="addForm.name" auto-complete="off"></el-input>
+				</el-form-item>
+				<el-form-item label="文件名">
+					<el-radio-group v-model="addForm.sex">
+						<el-radio class="radio" :label="1">男</el-radio>
+						<el-radio class="radio" :label="0">女</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="文件地址">
+					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
+				</el-form-item>
+				<el-form-item label="文件大小">
+					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
+				</el-form-item>
+				<el-form-item label="文件描述">
+					<el-input type="textarea" v-model="addForm.addr"></el-input>
+				</el-form-item>
+			</el-form>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="addFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+			</div>
+		</el-dialog>
+
 		<!--编辑界面-->
-		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
+		<el-dialog title="编辑" :visible.sync="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="name">
 					<el-input v-model="editForm.name" auto-complete="off"></el-input>
@@ -83,33 +113,25 @@
 			</div>
 		</el-dialog>
 
-		<!--新增界面-->
-		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-				<el-form-item label="姓名" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
-				</el-form-item>
-				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
-						<el-radio class="radio" :label="1">男</el-radio>
-						<el-radio class="radio" :label="0">女</el-radio>
-					</el-radio-group>
-				</el-form-item>
-				<el-form-item label="年龄">
-					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
-				</el-form-item>
-				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
-				</el-form-item>
-				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
-				</el-form-item>
-			</el-form>
+		<!--上传-->
+		<el-dialog title="上传" :visible.sync="uploadVisible" :close-on-click-modal="false">
+			<el-upload
+				:data="filters"
+				:headers="filters"
+				:multiple="false"
+				:limit="1"
+				class="upload-demo"
+				ref="upload"
+				action="https://jsonplaceholder.typicode.com/posts/"
+				:file-list="fileList">
+				<el-button slot="trigger" type="primary" size="small">上传文件</el-button>
+				<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+			</el-upload>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+				<el-button @click.native="uploadVisible = false">关闭</el-button>
 			</div>
 		</el-dialog>
+
 	</section>
 </template>
 
@@ -121,7 +143,7 @@
 		data() {
 			return {
 				filters: {
-					name: ''
+					name: '1'
 				},
 				dataList: [{
 				  id: 1,
@@ -177,10 +199,13 @@
 					age: 0,
 					birth: '',
 					addr: ''
-				}
+				},
 
+        uploadVisible: false,
+        fileList: []
 			}
 		},
+
 		methods: {
 			//性别显示转换
 			formatSex: function (row, column) {
@@ -215,11 +240,11 @@
 					let para = { id: row.id };
 					removeUser(para).then((res) => {
 						this.listLoading = false;
-						//NProgress.done();
-						this.$message({
-							message: '删除成功',
-							type: 'success'
-						});
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success'
+            });
 						this.getUsers();
 					});
 				}).catch(() => {
@@ -242,6 +267,14 @@
 					addr: ''
 				};
 			},
+      //显示上传界面
+      handleUpload: function (index, row) {
+        this.uploadVisible = true;
+
+      },
+      submitUpload() {
+        this.$refs.upload.submit();
+      },
 			//编辑
 			editSubmit: function () {
 				this.$refs.editForm.validate((valid) => {

@@ -4,57 +4,46 @@
 		<el-col :span="24" >
 			<el-form :inline="true" :model="filters" size="medium">
 				<el-form-item style="width: 140px;">
-					<el-select v-model="filters.key" @change="filters.value=''">
+					<el-select v-model="filters.key" @change="filters.value=null">
 						<el-option label="任务ID" value="taskId"/>
 						<el-option label="任务名称" value="taskName"/>
-						<el-option label="任务功能" value="taskType"/>
+						<el-option label="开始时间" value="startedAt"/>
 					</el-select>
 				</el-form-item>
 				<el-form-item>
 					<el-input v-model="filters.value" v-if="filters.key=='taskId'" placeholder="请输入任务ID"></el-input>
 					<el-input v-model="filters.value" v-if="filters.key=='taskName'" placeholder="请输入任务名称"></el-input>
-					<el-select v-model="filters.value" v-if="filters.key=='taskType'" placeholder="请选择" clearable>
-						<el-option
-							v-for="item in config['taskType']"
-							:key="item.value"
-							:label="item.label"
-							:value="item.value">
-						</el-option>
-					</el-select>
+					<el-date-picker
+						v-model="filters.value" v-if="filters.key=='startedAt'"
+						type="datetimerange"
+						range-separator="至"
+						start-placeholder="开始"
+						end-placeholder="结束">
+					</el-date-picker>
 				</el-form-item>
 				<el-form-item>
 					<el-button type="primary" plain @click="getUsers">查询</el-button>
-				</el-form-item>
-				<el-form-item style="float: right">
-					<el-button type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
 
 		<!--列表-->
 		<el-table :data="dataList" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-			<el-table-column prop="id" label="ID" width="60">
+			<el-table-column prop="taskId" label="任务ID" width="70">
 			</el-table-column>
-			<el-table-column label="任务名称" width="100">
-				<template slot-scope="scope">
-					<el-button type="text" size="medium" @click="handleView(scope.$index, scope.row)">{{scope.row.taskName}}</el-button>
-				</template>
-			</el-table-column>
-			<el-table-column prop="algoPlatform" label="算法平台" width="80"/>
-			<el-table-column prop="algoType" label="算法类型" width="120"/>
-			<el-table-column prop="taskType" label="任务功能" width="80"/>
-			<el-table-column prop="storeType" label="存储类型" width="80"/>
-			<el-table-column prop="startedAt" label="最后运行时间" width="155"/>
+			<el-table-column prop="taskName" label="任务名称" width="100"/>
+			<el-table-column prop="startedAt" label="开始时间" width="155"/>
+			<el-table-column prop="stoppedAt" label="结束时间" width="155"/>
+			<el-table-column prop="runTime" label="运行时长" width="155"/>
 			<el-table-column prop="runStatus" label="运行状态" min-width="70">
 				<template slot-scope="scope">
-					<el-tag type="success" size="small">成功</el-tag>
+					<el-tag type="warning" size="small">运行中</el-tag>
 				</template>
 			</el-table-column>
 			<el-table-column label="操作" width="240">
 				<template slot-scope="scope">
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">训练</el-button>
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button size="small" @click="handleDel(scope.$index, scope.row)" plain type="danger">删除</el-button>
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)" plain type="primary">日志</el-button>
+					<el-button size="small" @click="handleEdit(scope.$index, scope.row)" plain type="danger">停止</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
@@ -69,108 +58,11 @@
 			</el-pagination>
 		</el-col>
 
-		<!--新增-->
-		<el-dialog title="新增任务" :visible.sync="addVisible" :close-on-click-modal="false" width="900px" top="20px">
+		<!--查看-->
+		<el-dialog title="查看任务" :visible.sync="viewVisible" :close-on-click-modal="false" width="900px" top="20px">
 			<el-tabs type="card" style="margin: -30px 0 -30px 0;">
 				<el-tab-pane label="任务信息">
-					<el-form label-width="100px" size="medium" :rules="addFormRules" ref="addForm" style="width:500px;">
-						<el-form-item label="任务名称" prop="taskName">
-							<el-input v-model="addForm.taskName"></el-input>
-						</el-form-item>
-						<el-form-item label="算法平台" prop="algoPlatform">
-							<el-select v-model="addForm.algoPlatform" placeholder="请选择">
-								<el-option
-									v-for="item in config['algoPlatform']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="算法类型" prop="algoType">
-							<el-select v-model="addForm.algoType" multiple placeholder="请选择" style="width: 100%">
-								<el-option
-									v-for="item in config['algoType']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="任务功能" prop="taskType">
-							<el-select v-model="addForm.taskType" placeholder="请选择">
-								<el-option
-									v-for="item in config['taskType']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="训练服务器" prop="serverIp">
-							<el-select v-model="addForm.serverIp" placeholder="请选择">
-								<el-option
-									v-for="item in config['serverIp']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="存储类型" prop="storeType">
-							<el-select v-model="addForm.storeType" placeholder="请选择">
-								<el-option
-									v-for="item in config['storeType']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
-								</el-option>
-							</el-select>
-						</el-form-item>
-						<el-form-item label="运行命令">
-							<el-input type="textarea" v-model="addForm.command" autosize></el-input>
-						</el-form-item>
-					</el-form>
-				</el-tab-pane>
-				<el-tab-pane label="任务代码" :disabled="!addForm.storeType">
-					<editor v-model="addForm.algoCode"
-									theme="monokai"
-									lang="python"
-									height="410px"
-									v-show="addForm.storeType=='code'"></editor>
-					<el-form label-width="100px"
-									 size="medium"
-									 :rules="addFormRules"
-									 ref="addForm"
-									 v-show="addForm.storeType=='zip'"
-									 style="width:500px;">
-					<el-form-item label="任务文件" prop="filePath">
-						<el-upload
-							:data="filters"
-							:multiple="false"
-							:limit="1"
-							class="upload-demo"
-							ref="upload"
-							action="https://jsonplaceholder.typicode.com/posts/"
-							:file-list="fileList">
-							<el-button slot="trigger" type="primary" size="small" plain>选择文件</el-button>
-							<span class="el-upload__tip" style="margin-left: 10px">只能上传zip文件，且不超过10M</span>
-						</el-upload>
-					</el-form-item>
-					</el-form>
-				</el-tab-pane>
-			</el-tabs>
-			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="editLoading">保存</el-button>
-			</div>
-		</el-dialog>
-
-		<!--编辑-->
-		<el-dialog title="编辑任务" :visible.sync="editVisible" :close-on-click-modal="false" width="900px" top="20px">
-			<el-tabs type="card" style="margin: -30px 0 -30px 0;">
-				<el-tab-pane label="任务信息">
-					<el-form label-width="100px" size="medium" :rules="addFormRules" ref="editForm" style="width:500px;">
+					<el-form :model="editForm" label-width="100px" size="medium" :rules="addFormRules" ref="addForm" style="width:500px;">
 						<el-form-item label="任务名称" prop="taskName">
 							<el-input v-model="editForm.taskName"></el-input>
 						</el-form-item>
@@ -178,19 +70,19 @@
 							<el-select v-model="editForm.algoPlatform" placeholder="请选择">
 								<el-option
 									v-for="item in config['algoPlatform']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
 								</el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="算法类型" prop="algoType">
-							<el-select v-model="editForm.algoType" multiple placeholder="请选择" style="width: 100%">
+							<el-select v-model="editForm.algoType" multiple placeholder="请选择">
 								<el-option
 									v-for="item in config['algoType']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -198,9 +90,9 @@
 							<el-select v-model="editForm.taskType" placeholder="请选择">
 								<el-option
 									v-for="item in config['taskType']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
 								</el-option>
 							</el-select>
 						</el-form-item>
@@ -208,38 +100,24 @@
 							<el-select v-model="editForm.storeType" placeholder="请选择">
 								<el-option
 									v-for="item in config['storeType']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="服务器IP" prop="serverIp">
+							<el-select v-model="editForm.serverIp" placeholder="请选择">
+								<el-option
+									v-for="item in config['serverIp']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
 								</el-option>
 							</el-select>
 						</el-form-item>
 						<el-form-item label="运行命令">
 							<el-input type="textarea" v-model="editForm.command" autosize></el-input>
-						</el-form-item>
-					</el-form>
-				</el-tab-pane>
-				<el-tab-pane label="任务代码">
-					<editor v-model="editForm.algoCode"
-									theme="monokai"
-									lang="python"
-									height="410px"
-									v-show="editForm.storeType=='code'"></editor>
-					<el-form label-width="100px"
-									 size="medium"
-									 :rules="addFormRules"
-									 ref="addForm"
-									 v-show="editForm.storeType=='zip'"
-									 style="width:500px;">
-						<el-form-item label="服务器IP" prop="serverIp">
-							<el-select v-model="editForm.serverIp" placeholder="请选择">
-								<el-option
-									v-for="item in config['serverIp']"
-									:key="item.key"
-									:label="item.value"
-									:value="item.key">
-								</el-option>
-							</el-select>
 						</el-form-item>
 						<el-form-item label="任务文件" prop="filePath">
 							<el-upload
@@ -256,14 +134,187 @@
 						</el-form-item>
 					</el-form>
 				</el-tab-pane>
+				<el-tab-pane label="任务代码">
+					<editor v-model="editForm.algoCode" theme="monokai" lang="python" height="410px"></editor>
+				</el-tab-pane>
 			</el-tabs>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="editLoading">保存</el-button>
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
 			</div>
 		</el-dialog>
 
-		<!--查看-->
+		<!--新增-->
+		<el-dialog title="新增任务" :visible.sync="addVisible" :close-on-click-modal="false" width="900px" top="20px">
+			<el-tabs type="card" style="margin: -30px 0 -30px 0;">
+				<el-tab-pane label="任务信息">
+					<el-form :model="editForm" label-width="100px" size="medium" :rules="addFormRules" ref="addForm" style="width:500px;">
+						<el-form-item label="任务名称" prop="taskName">
+							<el-input v-model="editForm.taskName"></el-input>
+						</el-form-item>
+						<el-form-item label="算法平台" prop="algoPlatform">
+							<el-select v-model="editForm.algoPlatform" placeholder="请选择">
+								<el-option
+									v-for="item in config['algoPlatform']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="算法类型" prop="algoType">
+							<el-select v-model="editForm.algoType" multiple placeholder="请选择">
+								<el-option
+									v-for="item in config['algoPlatform']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="任务功能" prop="taskType">
+							<el-select v-model="editForm.taskType" placeholder="请选择">
+								<el-option
+									v-for="item in config['algoPlatform']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="存储类型" prop="storeType">
+							<el-select v-model="editForm.storeType" placeholder="请选择">
+								<el-option
+									v-for="item in config['algoPlatform']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="服务器IP" prop="serverIp">
+							<el-select v-model="editForm.serverIp" placeholder="请选择">
+								<el-option
+									v-for="item in config['algoPlatform']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="运行命令">
+							<el-input type="textarea" v-model="editForm.command" autosize></el-input>
+						</el-form-item>
+						<el-form-item label="任务文件" prop="filePath">
+							<el-upload
+								:data="filters"
+								:multiple="false"
+								:limit="1"
+								class="upload-demo"
+								ref="upload"
+								action="https://jsonplaceholder.typicode.com/posts/"
+								:file-list="fileList">
+								<el-button slot="trigger" type="primary" size="small" plain>选择文件</el-button>
+								<span class="el-upload__tip" style="margin-left: 10px">只能上传zip文件，且不超过10M</span>
+							</el-upload>
+						</el-form-item>
+					</el-form>
+				</el-tab-pane>
+				<el-tab-pane label="任务代码">
+					<editor v-model="editForm.algoCode" theme="monokai" lang="python" height="410px"></editor>
+				</el-tab-pane>
+			</el-tabs>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
+			</div>
+		</el-dialog>
+
+		<!--编辑-->
+		<el-dialog title="编辑任务" :visible.sync="editVisible" :close-on-click-modal="false" width="900px" top="20px">
+			<el-tabs type="card" style="margin: -30px 0 -30px 0;">
+				<el-tab-pane label="任务信息">
+					<el-form :model="editForm" label-width="100px" size="medium" :rules="addFormRules" ref="addForm" style="width:500px;">
+						<el-form-item label="任务名称" prop="taskName">
+							<el-input v-model="editForm.taskName"></el-input>
+						</el-form-item>
+						<el-form-item label="算法平台" prop="algoPlatform">
+							<el-select v-model="editForm.algoPlatform" placeholder="请选择">
+								<el-option
+									v-for="item in config['algoPlatform']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="算法类型" prop="algoType">
+							<el-select v-model="editForm.algoType" multiple placeholder="请选择" style="width: 100%">
+								<el-option
+									v-for="item in config['algoType']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="任务功能" prop="taskType">
+							<el-select v-model="editForm.taskType" placeholder="请选择">
+								<el-option
+									v-for="item in config['taskType']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="存储类型" prop="storeType">
+							<el-select v-model="editForm.storeType" placeholder="请选择">
+								<el-option
+									v-for="item in config['storeType']"
+									:key="item.value"
+									:label="item.label"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="服务器IP" prop="serverIp">
+							<el-select v-model="editForm.serverIp" placeholder="请选择">
+								<el-option
+									v-for="item in config['serverIp']"
+									:key="item.key"
+									:label="item.value"
+									:value="item.value">
+								</el-option>
+							</el-select>
+						</el-form-item>
+						<el-form-item label="运行命令">
+							<el-input type="textarea" v-model="editForm.command" autosize></el-input>
+						</el-form-item>
+						<el-form-item label="任务文件" prop="filePath">
+							<el-upload
+								:data="filters"
+								:multiple="false"
+								:limit="1"
+								class="upload-demo"
+								ref="upload"
+								action="https://jsonplaceholder.typicode.com/posts/"
+								:file-list="fileList">
+								<el-button slot="trigger" type="primary" size="small" plain>选择文件</el-button>
+								<span class="el-upload__tip" style="margin-left: 10px">只能上传zip文件，且不超过10M</span>
+							</el-upload>
+						</el-form-item>
+					</el-form>
+				</el-tab-pane>
+				<el-tab-pane label="任务代码">
+					<editor v-model="editForm.algoCode" theme="monokai" lang="python" height="410px"></editor>
+				</el-tab-pane>
+			</el-tabs>
+			<div slot="footer" class="dialog-footer">
+				<el-button @click.native="editFormVisible = false">取消</el-button>
+				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">保存</el-button>
+			</div>
+		</el-dialog>
 	</section>
 
 </template>
@@ -282,27 +333,21 @@
         config: {},
         filters: {
           key: 'taskId',
-					value: ''
+          value: null
         },
         dataList: [{
-          id: 13,
+          taskId: 13,
           taskName: '菜品分类',
-          algoPlatform: 'sklearn',
-          algoType: ['word2vec', 'svm'],
-          taskType: "文本分类",
-          storeType: "服务器",
           startedAt: "2017-10-10 10:22:23",
-          createdAt: "2017-10-10 10:22:23",
-          runStatus: "成功"
+          stoppedAt: "--",
+          runTime: "--",
+          runStatus: "运行中"
         }, {
-          id: 14,
+          taskId: 14,
           taskName: '菜品分类',
-          algoPlatform: 'sklearn',
-          algoType: ['word2vec', 'svm'],
-          taskType: "文本分类",
-          storeType: "服务器",
           startedAt: "2017-10-10 10:22:23",
-          createdAt: "2017-10-10 10:22:23",
+          stoppedAt: "2017-10-10 10:22:23",
+					runTime: "10h",
           runStatus: "成功"
         }],
         fileList: [],
@@ -329,7 +374,6 @@
           age: 0,
           birth: '',
           addr: '',
-					algoType: [],
           algoCode: "# -*- coding: utf-8 -*-\n" +
           "import random\n" +
           "import numpy as np\n" +
@@ -424,16 +468,14 @@
         },
         //新增界面数据
         addForm: {
-          algoCode: 'import',
           name: '',
           sex: -1,
           age: 0,
           birth: '',
-          addr: '',
-          algoType: []
+          addr: ''
 
         },
-				des: [],
+
         codeVisible: false
 
       }
@@ -506,13 +548,11 @@
       handleAdd: function () {
         this.addVisible = true;
         this.addForm = {
-          algoCode: 'import',
           name: '',
           sex: -1,
           age: 0,
           birth: '',
-          addr: '',
-					algoType: []
+          addr: ''
         };
       },
       //编辑
@@ -541,7 +581,6 @@
       },
       //新增
       addSubmit: function () {
-        console.log(this.addForm);
         this.$refs.addForm.validate((valid) => {
           if (valid) {
             this.$confirm('确认提交吗？', '提示', {}).then(() => {
